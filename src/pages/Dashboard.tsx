@@ -371,31 +371,31 @@ const ScannerTab = ({ isActive, onToggle, onScanComplete }: ScannerTabProps) => 
   const demoContent = [
     {
       id: "1",
-      username: "DrSarahMedical",
-      bio: "Board Certified Cardiologist • Harvard Med '15",
-      contentType: "Medical Advice",
-      profession: "doctor",
+      username: "lifestyle_vibes",
+      bio: "Travel • Fashion • Daily inspiration ✨",
+      contentType: "Instagram Post",
+      profession: "unknown",
     },
     {
       id: "2",
-      username: "TruthHealer99",
-      bio: "Natural medicine advocate • Your health journey",
-      contentType: "Health Tips",
-      profession: "doctor",
+      username: "crypto_guru_official",
+      bio: "💰 Make $10k/day with my secret method",
+      contentType: "YouTube Video",
+      profession: "unknown",
     },
     {
       id: "3",
-      username: "NewsFlash_Global",
-      bio: "Breaking news • Real stories • 24/7",
-      contentType: "Breaking News",
+      username: "tech_reviews_daily",
+      bio: "Honest tech reviews • 500K subscribers",
+      contentType: "YouTube Video",
       profession: "unknown",
     },
     {
       id: "4",
-      username: "AttorneyJohnson",
-      bio: "Licensed Attorney • NY Bar #847291",
-      contentType: "Legal Advice",
-      profession: "lawyer",
+      username: "celebrity_updates",
+      bio: "Breaking celebrity news and gossip",
+      contentType: "Instagram Reel",
+      profession: "unknown",
     },
   ];
 
@@ -481,21 +481,17 @@ const SettingsTab = () => {
     autoScan: true,
     dwellTime: 3,
     alertSound: true,
-    scanMedical: true,
-    scanLegal: true,
-    scanPolitical: true,
-    scanNews: true,
   });
 
   return (
     <div className="max-w-lg space-y-6">
-      <h2 className="text-xl font-bold text-foreground">Verification Preferences</h2>
+      <h2 className="text-xl font-bold text-foreground">Settings</h2>
 
       <div className="glass rounded-2xl p-6 space-y-6">
         <div className="flex items-center justify-between">
           <div>
             <p className="font-medium text-foreground">Auto-scan enabled</p>
-            <p className="text-sm text-muted-foreground">Automatically analyze content as you browse</p>
+            <p className="text-sm text-muted-foreground">Automatically analyze all content</p>
           </div>
           <button
             onClick={() => setPreferences(p => ({ ...p, autoScan: !p.autoScan }))}
@@ -512,7 +508,7 @@ const SettingsTab = () => {
         <div className="flex items-center justify-between">
           <div>
             <p className="font-medium text-foreground">Alert sounds</p>
-            <p className="text-sm text-muted-foreground">Play sound when threats are detected</p>
+            <p className="text-sm text-muted-foreground">Play sound when fake content detected</p>
           </div>
           <button
             onClick={() => setPreferences(p => ({ ...p, alertSound: !p.alertSound }))}
@@ -528,6 +524,7 @@ const SettingsTab = () => {
 
         <div>
           <p className="font-medium text-foreground mb-2">Dwell time: {preferences.dwellTime}s</p>
+          <p className="text-sm text-muted-foreground mb-3">Time to wait before analyzing content</p>
           <input
             type="range"
             min={1}
@@ -539,29 +536,18 @@ const SettingsTab = () => {
         </div>
       </div>
 
-      <div className="glass rounded-2xl p-6 space-y-4">
-        <p className="font-medium text-foreground">Content types to verify</p>
-        
-        {[
-          { key: "scanMedical", label: "Medical content" },
-          { key: "scanLegal", label: "Legal content" },
-          { key: "scanPolitical", label: "Political content" },
-          { key: "scanNews", label: "News content" },
-        ].map(({ key, label }) => (
-          <div key={key} className="flex items-center justify-between">
-            <p className="text-sm text-muted-foreground">{label}</p>
-            <button
-              onClick={() => setPreferences(p => ({ ...p, [key]: !p[key as keyof typeof p] }))}
-              className={`w-10 h-5 rounded-full transition-colors ${
-                preferences[key as keyof typeof preferences] ? "bg-primary" : "bg-secondary"
-              }`}
-            >
-              <div className={`w-4 h-4 rounded-full bg-foreground transition-transform ${
-                preferences[key as keyof typeof preferences] ? "translate-x-5" : "translate-x-0.5"
-              }`} />
-            </button>
-          </div>
-        ))}
+      <div className="glass rounded-2xl p-6">
+        <p className="font-medium text-foreground mb-2">Universal Analysis</p>
+        <p className="text-sm text-muted-foreground">
+          Veritas analyzes ALL content types including Instagram posts, YouTube videos, 
+          reels, and stories. No content is filtered - everything gets checked for:
+        </p>
+        <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
+          <li>• Fake accounts & impersonation</li>
+          <li>• AI-generated/deepfake content</li>
+          <li>• Misleading claims & misinformation</li>
+          <li>• Unverified credentials</li>
+        </ul>
       </div>
     </div>
   );
