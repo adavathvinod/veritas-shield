@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 import { 
   Shield, 
   Fingerprint, 
@@ -7,7 +10,8 @@ import {
   ChevronDown,
   Zap,
   Lock,
-  Globe
+  Globe,
+  LogIn
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FeatureCard } from "@/components/FeatureCard";
@@ -17,6 +21,21 @@ import { HowItWorks } from "@/components/HowItWorks";
 import { TechStack } from "@/components/TechStack";
 
 const Index = () => {
+  const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setIsLoggedIn(!!session);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setIsLoggedIn(!!session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
@@ -25,13 +44,22 @@ const Index = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/10 rounded-full blur-3xl opacity-50" />
         
-        <div className="relative container mx-auto px-4 pt-12 pb-8">
-          {/* Logo */}
-          <div className="flex items-center justify-center gap-2 mb-8 opacity-0 animate-fade-in">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-emerald-500 flex items-center justify-center glow-primary">
-              <Shield className="w-6 h-6 text-primary-foreground" />
+        <div className="relative container mx-auto px-4 pt-8 pb-8">
+          {/* Top bar */}
+          <div className="flex items-center justify-between mb-8 opacity-0 animate-fade-in">
+            <div className="flex items-center gap-2">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-emerald-500 flex items-center justify-center glow-primary">
+                <Shield className="w-6 h-6 text-primary-foreground" />
+              </div>
+              <span className="text-2xl font-bold text-foreground">Veritas</span>
             </div>
-            <span className="text-2xl font-bold text-foreground">Veritas</span>
+            <Button 
+              variant="glass" 
+              onClick={() => navigate(isLoggedIn ? "/dashboard" : "/auth")}
+            >
+              <LogIn className="w-4 h-4 mr-2" />
+              {isLoggedIn ? "Dashboard" : "Sign In"}
+            </Button>
           </div>
 
           {/* Hero text */}
@@ -45,9 +73,13 @@ const Index = () => {
               Real-time verification of credentials, deepfake detection, and fact-checking while you scroll.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center opacity-0 animate-fade-in" style={{ animationDelay: "300ms" }}>
-              <Button variant="hero" size="lg">
+              <Button 
+                variant="hero" 
+                size="lg"
+                onClick={() => navigate(isLoggedIn ? "/dashboard" : "/auth")}
+              >
                 <Zap className="w-5 h-5 mr-2" />
-                Get Early Access
+                {isLoggedIn ? "Go to Dashboard" : "Get Early Access"}
               </Button>
               <Button variant="glass" size="lg">
                 Learn More
@@ -135,8 +167,13 @@ const Index = () => {
             <p className="text-muted-foreground mb-6">
               Be among the first to experience the future of content verification.
             </p>
-            <Button variant="hero" size="xl" className="w-full">
-              Request Early Access
+            <Button 
+              variant="hero" 
+              size="xl" 
+              className="w-full"
+              onClick={() => navigate(isLoggedIn ? "/dashboard" : "/auth")}
+            >
+              {isLoggedIn ? "Open Dashboard" : "Request Early Access"}
             </Button>
             <p className="text-xs text-muted-foreground mt-4">
               Available for iOS and Android • Coming Q1 2025

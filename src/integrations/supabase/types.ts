@@ -14,7 +14,120 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          display_name: string | null
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      scan_history: {
+        Row: {
+          alert_message: string | null
+          alert_type: string | null
+          confidence_score: number | null
+          content_type: string
+          credential_verified: boolean | null
+          deepfake_detected: boolean | null
+          id: string
+          platform: string | null
+          scanned_at: string
+          user_id: string
+          username_scanned: string | null
+          verification_status: string
+        }
+        Insert: {
+          alert_message?: string | null
+          alert_type?: string | null
+          confidence_score?: number | null
+          content_type: string
+          credential_verified?: boolean | null
+          deepfake_detected?: boolean | null
+          id?: string
+          platform?: string | null
+          scanned_at?: string
+          user_id: string
+          username_scanned?: string | null
+          verification_status: string
+        }
+        Update: {
+          alert_message?: string | null
+          alert_type?: string | null
+          confidence_score?: number | null
+          content_type?: string
+          credential_verified?: boolean | null
+          deepfake_detected?: boolean | null
+          id?: string
+          platform?: string | null
+          scanned_at?: string
+          user_id?: string
+          username_scanned?: string | null
+          verification_status?: string
+        }
+        Relationships: []
+      }
+      verification_preferences: {
+        Row: {
+          alert_sound_enabled: boolean
+          auto_scan_enabled: boolean
+          created_at: string
+          dwell_time_seconds: number
+          id: string
+          scan_legal_content: boolean
+          scan_medical_content: boolean
+          scan_news_content: boolean
+          scan_political_content: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          alert_sound_enabled?: boolean
+          auto_scan_enabled?: boolean
+          created_at?: string
+          dwell_time_seconds?: number
+          id?: string
+          scan_legal_content?: boolean
+          scan_medical_content?: boolean
+          scan_news_content?: boolean
+          scan_political_content?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          alert_sound_enabled?: boolean
+          auto_scan_enabled?: boolean
+          created_at?: string
+          dwell_time_seconds?: number
+          id?: string
+          scan_legal_content?: boolean
+          scan_medical_content?: boolean
+          scan_news_content?: boolean
+          scan_political_content?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
