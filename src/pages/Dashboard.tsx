@@ -47,7 +47,11 @@ const Dashboard = () => {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [scanHistory, setScanHistory] = useState<ScanHistoryItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isActive, setIsActive] = useState(false);
+  const [isActive, setIsActive] = useState(() => {
+    // Initialize from localStorage - protection stays ON until user turns it OFF
+    const saved = localStorage.getItem("veritas_protection_active");
+    return saved === "true";
+  });
   const [activeTab, setActiveTab] = useState<"scan" | "history" | "settings">("scan");
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
 
@@ -280,7 +284,12 @@ const Dashboard = () => {
         {activeTab === "scan" && (
           <ScannerTab 
             isActive={isActive} 
-            onToggle={() => setIsActive(!isActive)}
+            onToggle={() => {
+              const newState = !isActive;
+              setIsActive(newState);
+              localStorage.setItem("veritas_protection_active", String(newState));
+              toast.success(newState ? "Protection activated - continuous monitoring enabled" : "Protection disabled");
+            }}
             onScanComplete={handleScanComplete}
           />
         )}
