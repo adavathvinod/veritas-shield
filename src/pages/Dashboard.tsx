@@ -11,11 +11,15 @@ import {
   CheckCircle2,
   AlertTriangle,
   Clock,
-  Trash2
+  Trash2,
+  Bell,
+  ShieldAlert
 } from "lucide-react";
 import { toast } from "sonner";
 import { VeritasToggle } from "@/components/VeritasToggle";
 import { ContentCard } from "@/components/ContentCard";
+import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
+import { useUserRole } from "@/hooks/useUserRole";
 import type { User, Session } from "@supabase/supabase-js";
 
 interface ScanHistoryItem {
@@ -45,9 +49,13 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isActive, setIsActive] = useState(false);
   const [activeTab, setActiveTab] = useState<"scan" | "history" | "settings">("scan");
+  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+
+  // Hooks for admin role and notifications
+  const { isAdmin } = useUserRole(user?.id);
+  const { requestPermission } = useRealtimeNotifications(user?.id, notificationsEnabled && isActive);
 
   useEffect(() => {
-    // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         setSession(session);
@@ -193,7 +201,29 @@ const Dashboard = () => {
             <span className="text-lg font-bold text-foreground">Veritas</span>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            {/* Notification toggle */}
+            <Button 
+              variant={notificationsEnabled ? "default" : "ghost"} 
+              size="icon"
+              onClick={() => {
+                if (!notificationsEnabled) {
+                  requestPermission();
+                }
+                setNotificationsEnabled(!notificationsEnabled);
+              }}
+              title={notificationsEnabled ? "Notifications enabled" : "Notifications disabled"}
+            >
+              <Bell className={`w-4 h-4 ${notificationsEnabled ? "" : "text-muted-foreground"}`} />
+            </Button>
+
+            {/* Admin link */}
+            {isAdmin && (
+              <Button variant="ghost" size="icon" onClick={() => navigate("/admin")} title="Admin Dashboard">
+                <ShieldAlert className="w-4 h-4 text-destructive" />
+              </Button>
+            )}
+
             <span className="text-sm text-muted-foreground hidden sm:block">
               {profile?.display_name || user?.email}
             </span>
